@@ -5,9 +5,10 @@
   },
   "description": "https://github.com/mui-org/material-ui/blob/master/docs/src/pages/components/grid/NestedGrid.js",
   "dependencies": {
-    "react-dom": "latest",
+    "@material-ui/core": "latest",
+    "@material-ui/icons": "4.5.1",
     "react": "latest",
-    "@material-ui/core": "latest"
+    "react-dom": "latest"
   },
   "keywords": [],
   "name": "material-scan-ui",

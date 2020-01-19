@@ -14,11 +14,22 @@ import {
   Box,
   FormControl,
   InputLabel,
+  IconButton,
   Select,
   MenuItem,
   Chip,
-  TextField
+  TextField,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  CardHeader,
+  Collapse,
+  Avatar
 } from "@material-ui/core";
+import clsx from "clsx";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import BatteryFullOutlinedIcon from "@material-ui/icons/BatteryFullOutlined";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +37,31 @@ const useStyles = makeStyles(theme => ({
   },
   chipColor: {
     backgroundColor: "#9BD3FF"
+  },
+
+  card: {
+    maxWidth: 345,
+    backgroundColor: "#303030",
+    color: "#9BD3FF"
+  },
+
+  expand: {
+    transform: "rotate(0deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest
+    })
+  },
+
+  expandOpen: {
+    transform: "rotate(180deg)"
+  },
+
+  chipColorSave: {
+    color: "#FFFFFF",
+    backgroundColor: "#005FAB",
+    borderColor: "#FFFFFF",
+    borderwidth: "4px"
   },
 
   paper: {
@@ -60,8 +96,7 @@ const useStyles = makeStyles(theme => ({
   paperLight: {
     padding: "4px",
     textAlign: "center",
-    backgroundColor: "#303030",
-    borderColor: "red"
+    backgroundColor: "#303030"
   },
   blanksheetConnected: {
     textAlign: "center",
@@ -87,6 +122,16 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#303030",
     color: "#9BD3FF",
     borderColor: "#9BD3FF"
+  },
+
+  mapButton: {
+    color: "#000000",
+    backgroundColor: "#9BD3FF"
+  },
+
+  media: {
+    height: 0,
+    paddingTop: "56.25%" // 16:9
   },
 
   green: {
@@ -123,9 +168,39 @@ const useStyles = makeStyles(theme => ({
     }
   },
 
+  inputOutlined: {
+    "& label.Mui-focused": {
+      color: "#9BD3FF"
+    },
+    "& .MuiInputLabel-outlined": {
+      color: "#9BD3FF",
+      borderColor: "#9BD3FF"
+    },
+    "& .MuiOutlinedInput-input": {
+      color: "#9BD3FF",
+      backgroundColor: "#353F48",
+      borderRadius: "4px"
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "transparent"
+      },
+      "&.MuiInputLabel-outlined": {
+        color: "#9BD3FF",
+        borderColor: "#9BD3FF"
+      },
+      "&:hover fieldset": {
+        borderColor: "#9BD3FF"
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#9BD3FF"
+      }
+    }
+  },
+
   formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
+    margin: "5px",
+    minWidth: 110,
     borderRadius: "4px",
     borderWidth: "8px",
     borderColor: "red",
@@ -151,8 +226,7 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: "#353F48",
       paddingLeft: "5px",
       paddingRight: "5px",
-      borderRadius: "4px",
-      borderWidth: "10px"
+      borderRadius: "4px"
     }
   },
   icon: {
@@ -218,6 +292,9 @@ const customTheme = createMuiTheme({
     secondary: {
       main: "#353F48",
       contrastText: "#9BD3FF"
+    },
+    textSecondary: {
+      color: "#9BD3FF"
     }
   }
 });
@@ -226,6 +303,11 @@ export default function NestedGrid() {
   const [state, setState] = React.useState({
     checkedA: true
   });
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.checked });
@@ -248,6 +330,62 @@ export default function NestedGrid() {
   function FormRow() {
     return (
       <ThemeProvider theme={customTheme}>
+        <Paper className={classes.paper}>
+          <Grid
+            container
+            item
+            xs={12}
+            spacing={1}
+            direction="row"
+            justify="center"
+            alignContent="center"
+          >
+            <Grid item xs={8}>
+              <FormControl
+                variant="outlined"
+                className={classes.formControl}
+                color="secondary"
+              >
+                <InputLabel
+                  ref={inputLabel}
+                  id="demo-simple-select-outlined-label"
+                >
+                  Beacon
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  value={age}
+                  onChange={handleChange}
+                  labelWidth={labelWidth}
+                  inputProps={{
+                    classes: {
+                      icon: classes.icon
+                    }
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Please Select</em>
+                  </MenuItem>
+                  <MenuItem value={1}>01</MenuItem>
+                  <MenuItem value={2}>02</MenuItem>
+                  <MenuItem value={3}>03</MenuItem>
+                  <MenuItem value={4}>04</MenuItem>
+                  <MenuItem value={5}>05</MenuItem>
+                </Select>
+              </FormControl>
+              <form className={classes.root} noValidate>
+                <CssTextField
+                  className={classes.margin}
+                  label="Hello"
+                  variant="outlined"
+                  id="custom-css-outlined-input"
+                />
+              </form>
+            </Grid>
+          </Grid>
+        </Paper>
+
         <React.Fragment>
           <Paper className={classes.paper}>
             <Typography className={classes.textWhite} variant="caption">
@@ -264,14 +402,7 @@ export default function NestedGrid() {
                 direction="row"
                 justify="center"
               >
-                <Grid
-                  item
-                  container
-                  xs={8}
-                  spacing={1}
-                  direction="reverse-column"
-                  justify="center"
-                >
+                <Grid item container xs={8} spacing={1} justify="center">
                   <Grid item xs={10}>
                     <Paper elevation={0} className={classes.paper}>
                       <Typography className={classes.text} variant="subtitle2">
@@ -304,7 +435,7 @@ export default function NestedGrid() {
                         </Typography>
                       </Paper>
                     </Grid>
-                    <Grid item xs={10} spacing={1}>
+                    <Grid item xs={10}>
                       <Paper className={classes.blanksheet}>
                         <Typography
                           className={classes.blanksheetConnected}
@@ -498,14 +629,153 @@ export default function NestedGrid() {
               />
             </Grid>
             <Grid item>
-              <form className={classes.root} noValidate>
-                <CssTextField
-                  className={classes.margin}
-                  label="Hello"
-                  variant="outlined"
-                  id="custom-css-outlined-input"
+              <Chip
+                variant="outlined"
+                label="Save"
+                className={classes.chipColorSave}
+                onClick={handleClick}
+              />
+            </Grid>
+            <Grid
+              item
+              container
+              spacing={1}
+              direction="row"
+              justify="center"
+              align="center"
+            >
+              <Grid item>
+                <form className={classes.root} noValidate>
+                  <CssTextField
+                    className={classes.margin}
+                    label="Hello"
+                    variant="outlined"
+                    id="custom-css-outlined-input"
+                  />
+                </form>
+              </Grid>
+              <Grid item className={classes.mapButtonPadding}>
+                <Button variant="contained" className={classes.mapButton}>
+                  Map
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Paper>
+
+        <Grid container item justify="center" alignItems="center" spacing={1}>
+          <Grid item>
+            <form
+              className={classes.inputOutlined}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="outlined-basic"
+                label="Outlined"
+                variant="outlined"
+                style={{ width: 110 }}
+              />
+            </form>
+          </Grid>
+          <Grid item>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel
+                ref={inputLabel}
+                id="demo-simple-select-outlined-label"
+              >
+                Age
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={age}
+                onChange={handleChange}
+                labelWidth={labelWidth}
+                inputProps={{
+                  classes: {
+                    icon: classes.icon
+                  }
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Paper className={classes.paper}>
+          <Grid container item>
+            <Grid item>
+              <Card className={classes.card}>
+                <CardMedia
+                  className={classes.media}
+                  image="/static/images/cards/paella.jpg"
+                  title="Paella dish"
                 />
-              </form>
+                <CardHeader
+                  avatar={
+                    <Avatar aria-label="recipe" className={classes.avatar}>
+                      Icon
+                    </Avatar>
+                  }
+                  title="Title (Tool or Person ID)"
+                  subheader={
+                    <Typography
+                      variant="caption"
+                      className={classes.paperLiveInt}
+                    >
+                      Beacon # and last connect
+                    </Typography>
+                  }
+                />
+                <CardContent>
+                  <Typography
+                    variant="body2"
+                    className={classes.textWhite}
+                    component="p"
+                  >
+                    Notes this is a lot of text to test what happens when you
+                    have a lot of notes like if the person was
+                  </Typography>
+                </CardContent>
+                <CardActions disableSpacing>
+                  <Button variant="contained" color="secondary">
+                    Locate
+                  </Button>
+
+                  <BatteryFullOutlinedIcon className={classes.paperLiveInt} />
+                  <Typography
+                    variant="caption"
+                    className={classes.paperLiveInt}
+                  >
+                    1.5V
+                  </Typography>
+
+                  <IconButton
+                    className={clsx(classes.expand, {
+                      [classes.expandOpen]: expanded
+                    })}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                  >
+                    <ExpandMoreIcon />
+                  </IconButton>
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <CardContent>
+                    <Typography paragraph>Notes Continued:</Typography>
+                    <Typography className={classes.textWhite} paragraph>
+                      More Notes
+                    </Typography>
+                  </CardContent>
+                </Collapse>
+              </Card>
             </Grid>
           </Grid>
         </Paper>
